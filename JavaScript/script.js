@@ -1,5 +1,5 @@
 
-// Elements
+// Elements del Dom
 const labelWelcome = document.querySelector('.welcome')
 const labelDate = document.querySelector('.date')
 const labelBalance = document.querySelector('.balance__value')
@@ -24,3 +24,41 @@ const inputTransferAmount = document.querySelector('.form__input--amount')
 const inputLoanAmount = document.querySelector('.form__input--loan-amount')
 const inputCloseUsername = document.querySelector('.form__input--user')
 const inputClosePin = document.querySelector('.form__input--pin')
+
+//trayendo los datos del api
+
+const SERVER_URL = 'http://localhost:3000'
+const Login_URL = `${SERVER_URL}/login?`
+const username = inputLoginUsername.value
+const pin = inputLoginPin.value
+const URL = `${Login_URL}username=${username}&pin=${pin}`
+
+async function procesarDatos() {
+  const dishesPromise = fetch(DISHES_URL)
+    .then((response) => {
+      return response.json() // no olvidar el return si hay llaves en la función
+    })
+    .then((data) => data)
+
+  const categoriesPromise = fetch(CATEGORIES_URL)
+    .then((response) => {
+      return response.json() // no olvidar el return si hay llaves en la función
+    })
+    .then((data) => data)
+
+  const restaurantsPromise = fetch(RESTAURANTS_URL)
+    .then((response) => {
+      return response.json() // no olvidar el return si hay llaves en la función
+    })
+    .then((data) => data)
+
+  const [dishes, categories, restaurants] = await Promise.all([
+    dishesPromise,
+    categoriesPromise,
+    restaurantsPromise,
+  ])
+
+  insertarDatos(dishes, categories, restaurants)
+}
+
+
