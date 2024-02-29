@@ -1,4 +1,3 @@
-
 // Elements del Dom
 const labelWelcome = document.querySelector('.welcome')
 const labelDate = document.querySelector('.date')
@@ -29,36 +28,34 @@ const inputClosePin = document.querySelector('.form__input--pin')
 
 const SERVER_URL = 'http://localhost:3000'
 const Login_URL = `${SERVER_URL}/login?`
-const username = inputLoginUsername.value
-const pin = inputLoginPin.value
-const URL = `${Login_URL}username=${username}&pin=${pin}`
 
-async function procesarDatos() {
-  const dishesPromise = fetch(DISHES_URL)
+btnLogin.addEventListener('click', async function procesarDatos(e) {
+  //1.no llamar al aservidor
+  e.preventDefault()
+  //2.buscar cuenta del usuario  y ver si existe
+  const username = inputLoginUsername.value
+  const pin = inputLoginPin.value
+  const URL_ALL = `${Login_URL}username=${username}&pin=${pin}`
+ const loginData = await  fetch(URL_ALL)
     .then((response) => {
       return response.json() // no olvidar el return si hay llaves en la función
     })
     .then((data) => data)
 
-  const categoriesPromise = fetch(CATEGORIES_URL)
-    .then((response) => {
-      return response.json() // no olvidar el return si hay llaves en la función
-    })
-    .then((data) => data)
+const { account, token, message } = loginData
+ console.log(loginData)
+  //4.validar que accounts no este vacio
+  if (!message) {
+    console.log('Login correcto')
+    //5.si existe, mostrar la app y el mensaje de bienvenida
+    containerApp.style.opacity = 100
+    labelWelcome.textContent = `Bienvenido, ${account.owner}`
+    labelWelcome.style.opacity = 100
+  } else {
 
-  const restaurantsPromise = fetch(RESTAURANTS_URL)
-    .then((response) => {
-      return response.json() // no olvidar el return si hay llaves en la función
-    })
-    .then((data) => data)
-
-  const [dishes, categories, restaurants] = await Promise.all([
-    dishesPromise,
-    categoriesPromise,
-    restaurantsPromise,
-  ])
-
-  insertarDatos(dishes, categories, restaurants)
-}
-
-
+ console.log('Login incorrecto')
+  }
+  //4.limpiar los inputs
+  inputLoginUsername.value = inputLoginPin.value = ''
+  inputLoginPin.blur() //quita el focus
+})
