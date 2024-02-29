@@ -33,17 +33,22 @@ btnLogin.addEventListener('click', async function procesarDatos(e) {
   //1.no llamar al aservidor
   e.preventDefault()
   //2.buscar cuenta del usuario  y ver si existe
-  const username = inputLoginUsername.value
-  const pin = inputLoginPin.value
+  const username = inputLoginUsername.value || 'maria_p'
+  const pin = inputLoginPin.value || 2222
   const URL_ALL = `${Login_URL}username=${username}&pin=${pin}`
- const loginData = await  fetch(URL_ALL)
+  const loginData = await fetch(URL_ALL)
     .then((response) => {
       return response.json() // no olvidar el return si hay llaves en la función
     })
     .then((data) => data)
 
-const { account, token, message } = loginData
- console.log(loginData)
+  const { account, token, message } = loginData
+  const { movements } = account
+  /* const monto = movements.map(function (movement) {
+  return movement.amount
+}) */
+
+  updateUI(movements)
   //4.validar que accounts no este vacio
   if (!message) {
     console.log('Login correcto')
@@ -52,10 +57,30 @@ const { account, token, message } = loginData
     labelWelcome.textContent = `Bienvenido, ${account.owner}`
     labelWelcome.style.opacity = 100
   } else {
-
- console.log('Login incorrecto')
+    console.log('Login incorrecto')
   }
   //4.limpiar los inputs
   inputLoginUsername.value = inputLoginPin.value = ''
   inputLoginPin.blur() //quita el focus
 })
+
+function updateUI(movements) {
+  displayMovements(movements)
+  // displayBalance(movements)
+  // displaySummary(movements)
+}
+
+function displayMovements(movements) {
+  containerMovements.innerHTML = ''
+  movements.forEach(function (mon, i) {
+    const type = mon.amount > 0 ? 'deposit' : 'withdrawal'
+    const html = `
+      <div class="movements__row">
+        <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
+        <div class="movements__value">${mon.amount}€</div>
+        <div class="movements__date"> ${mon.date}</div>
+      </div>
+    `
+    containerMovements.insertAdjacentHTML('afterbegin', html)
+  })
+}
