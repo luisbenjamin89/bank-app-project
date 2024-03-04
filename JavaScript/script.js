@@ -26,29 +26,24 @@ const inputClosePin = document.querySelector('.form__input--pin')
 
 //trayendo los datos del api
 
-const SERVER_URL = 'http://localhost:3000'
-const Login_URL = `${SERVER_URL}/login?`
+const SERVER_URL = 'http://localhost:3000/login?'
+
 
 btnLogin.addEventListener('click', async function procesarDatos(e) {
   //1.no llamar al aservidor
   e.preventDefault()
   //2.buscar cuenta del usuario  y ver si existe
-  const username = inputLoginUsername.value || 'maria_p'
-  const pin = inputLoginPin.value || 2222
-  const URL_ALL = `${Login_URL}username=${username}&pin=${pin}`
+  const username = inputLoginUsername.value
+  const pin = inputLoginPin.value
+  const URL_ALL = `${SERVER_URL}username=${username}&pin=${pin}`
   const loginData = await fetch(URL_ALL)
     .then((response) => {
-      return response.json() // no olvidar el return si hay llaves en la función
+      return response.json()
     })
     .then((data) => data)
 
   const { account, token, message } = loginData
-  const { movements } = account
-  /* const monto = movements.map(function (movement) {
-  return movement.amount
-}) */
 
-  updateUI(movements)
   //4.validar que accounts no este vacio
   if (!message) {
     console.log('Login correcto')
@@ -57,17 +52,28 @@ btnLogin.addEventListener('click', async function procesarDatos(e) {
     labelWelcome.textContent = `Bienvenido, ${account.owner}`
     labelWelcome.style.opacity = 100
   } else {
-    console.log('Login incorrecto')
+    containerMovements.innerHTML = ''
+    /*    const html = `
+      <div role="alert" class="alert alert-warning">
+  <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+  <span>Warning:Usuario o contraseña invalidos!</span>
+</div>
+    `
+    containerMovements.insertAdjacentHTML('afterbegin', html)  */
+    console.log('loggin inconrrecto')
   }
   //4.limpiar los inputs
+  const { movements } = account
+
+  updateUI(movements)
   inputLoginUsername.value = inputLoginPin.value = ''
   inputLoginPin.blur() //quita el focus
 })
 
 function updateUI(movements) {
   displayMovements(movements)
-  // displayBalance(movements)
-  // displaySummary(movements)
+   displayBalance(movements)
+  displaySummary(movements)
 }
 
 function displayMovements(movements) {
@@ -84,3 +90,12 @@ function displayMovements(movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html)
   })
 }
+
+ const displayBalance = function (movements) {
+   const balance = movements.reduce((acc, mon) => {
+     return acc + mon.amount
+   }, 0)
+   labelBalance.textContent = `${balance.toFixed(2)}€`
+ }
+
+ 
