@@ -98,4 +98,14 @@ function displayMovements(movements) {
    labelBalance.textContent = `${balance.toFixed(2)}€`
  }
 
- 
+  const displaySummary = function (movements) {
+    const sumIn = movements
+      .filter((mon) => mon.amount > 0)
+      .reduce((acc, mon) => acc + mon.amount, 0)
+    labelSumIn.textContent = `${sumIn.toFixed(2)}€`
+
+    const sumOut = movements
+      .filter((mon) => mon.amount < 0)
+      .reduce((acc, mon) => acc + mon.amount, 0)
+    labelSumOut.textContent = `${Math.abs(sumOut).toFixed(2)}€`
+  }
