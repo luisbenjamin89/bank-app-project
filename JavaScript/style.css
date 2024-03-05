@@ -4,6 +4,11 @@
  * Have fun! 😁
  */
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 * {
   margin: 0;
   padding: 0;
@@ -33,6 +38,22 @@ nav {
 .welcome {
   font-size: 1.9rem;
   font-weight: 500;
+}
+
+.cuenta {
+  font-size: 1.9rem;
+  font-weight: 500;
+  opacity : 0;
+}
+.ID {
+  font-size: 1.9rem;
+  font-weight: 500;
+  opacity : 0;
+}
+.addres {
+  font-size: 1.9rem;
+  font-weight: 500;
+  opacity : 0;
 }
 
 .logo {

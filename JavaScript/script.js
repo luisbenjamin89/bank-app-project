@@ -1,5 +1,9 @@
 // Elements del Dom
 const labelWelcome = document.querySelector('.welcome')
+const labelcuenta = document.querySelector('.cuenta')
+const labelerror = document.querySelector('.alert-error')
+const labelID = document.querySelector('.ID')
+const labeladdres=document.querySelector('.addres')
 const labelDate = document.querySelector('.date')
 const labelBalance = document.querySelector('.balance__value')
 const labelSumIn = document.querySelector('.summary__value--in')
@@ -50,23 +54,23 @@ btnLogin.addEventListener('click', async function procesarDatos(e) {
     //5.si existe, mostrar la app y el mensaje de bienvenida
     containerApp.style.opacity = 100
     labelWelcome.textContent = `Bienvenido, ${account.owner}`
+    labelcuenta.textContent= `Numero de cuenta: ${account.numberAccount}`
+    labeladdres.textContent = `Direccion: ${account.address} `
+    labelID.textContent = `ID: ${account.nationalIdNumber}`
     labelWelcome.style.opacity = 100
+    labelcuenta.style.opacity = 100
+    labeladdres.style.opacity = 100
+    labelID.style.opacity = 100
+    labelerror.style.opacity = 0
   } else {
-    containerMovements.innerHTML = ''
-    /*    const html = `
-      <div role="alert" class="alert alert-warning">
-  <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-  <span>Warning:Usuario o contraseña invalidos!</span>
-</div>
-    `
-    containerMovements.insertAdjacentHTML('afterbegin', html)  */
-    console.log('loggin inconrrecto')
+labelerror.style.opacity = 100
   }
   //4.limpiar los inputs
   const { movements } = account
 
   updateUI(movements)
-  inputLoginUsername.value = inputLoginPin.value = ''
+  inputLoginUsername.style.opacity = 0
+  inputLoginPin.style.opacity = 0
   inputLoginPin.blur() //quita el focus
 })
 
@@ -96,6 +100,8 @@ function displayMovements(movements) {
      return acc + mon.amount
    }, 0)
    labelBalance.textContent = `${balance.toFixed(2)}€`
+   const  fechaActual = new Date()
+   labelDate.textContent = `${fechaActual.getDate()}/${fechaActual.getMonth() + 1}/${fechaActual.getFullYear()}`
  }
 
   const displaySummary = function (movements) {
