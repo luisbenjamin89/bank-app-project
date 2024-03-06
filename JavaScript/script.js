@@ -33,6 +33,7 @@ const inputClosePin = document.querySelector('.form__input--pin')
 const SERVER_URL = 'http://localhost:3000/login?'
 
 
+
 btnLogin.addEventListener('click', async function procesarDatos(e) {
   //1.no llamar al aservidor
   e.preventDefault()
@@ -46,11 +47,13 @@ btnLogin.addEventListener('click', async function procesarDatos(e) {
     })
     .then((data) => data)
 
-  const { account, token, message } = loginData
-
+  const { account, token:tokenunit ,message } = loginData
+localStorage.setItem('clave', tokenunit)
+ 
+ 
   //4.validar que accounts no este vacio
   if (!message) {
-    console.log('Login correcto')
+  
     //5.si existe, mostrar la app y el mensaje de bienvenida
     containerApp.style.opacity = 100
     labelWelcome.textContent = `Bienvenido, ${account.owner}`
@@ -69,6 +72,7 @@ labelerror.style.opacity = 100
   const { movements } = account
 
   updateUI(movements)
+ 
   inputLoginUsername.style.opacity = 0
   inputLoginPin.style.opacity = 0
   inputLoginPin.blur() //quita el focus
@@ -115,3 +119,26 @@ function displayMovements(movements) {
       .reduce((acc, mon) => acc + mon.amount, 0)
     labelSumOut.textContent = `${Math.abs(sumOut).toFixed(2)}€`
   }
+
+
+
+  // Example POST method implementation:
+
+  
+btnLoan.addEventListener( 'click', async function postData(e){
+ e.preventDefault()
+  let token = localStorage.getItem('clave')
+  const url = `http://localhost:4000/movements?token=${token}`
+  const data = {
+   amount: inputLoanAmount.value, date: new Date().toISOString() ,
+  }
+  const response = await fetch(url, {
+    method: 'POST', // GET por defecto
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then((data) => {
+    console.log(data) // JSON data parsed by `data.json()` call
+  })
+})
