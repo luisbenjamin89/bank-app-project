@@ -136,7 +136,8 @@ app.post('/movements', (req, res) => {
         date: new Date().toISOString(),
       })
       debugLog('Movements updated successfully.')
-      res.json({ message: 'Movements updated' })
+      res.json({ movements: accounts[accountIndex].movements })
+      //res.json({ message: 'Movements updated' })
     } else {
       debugLog('Account not found.')
       res.status(404).json({ message: 'Account not found' })
