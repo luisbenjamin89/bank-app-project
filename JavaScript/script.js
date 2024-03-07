@@ -28,6 +28,11 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount')
 const inputCloseUsername = document.querySelector('.form__input--user')
 const inputClosePin = document.querySelector('.form__input--pin')
 
+window.onload= ()=>
+setTimeout(() => 
+document.getElementById("alert").style.opacity = 0
+, 5000);
+
 let total = 0
 let usermane = ''
 let pin = ''
@@ -67,6 +72,7 @@ btnLogin.addEventListener('click', async function procesarDatos(e) {
     labelerror.style.opacity = 0
   } else {
     labelerror.style.opacity = 100
+    
   }
   //4.limpiar los inputs
   const { movements } = account
