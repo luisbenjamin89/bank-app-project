@@ -31,7 +31,7 @@ const inputClosePin = document.querySelector('.form__input--pin')
 window.onload= ()=>
 setTimeout(() => 
 document.getElementById("alert").style.opacity = 0
-, 5000);
+, 6000);
 
 let total = 0
 let usermane = ''
@@ -153,8 +153,11 @@ btnLoan.addEventListener('click', async function postData(e) {
   const newtotal = total + parseInt(data.amount)
   labelBalance.textContent = `${newtotal.toFixed(2)}€`
 
+
   ServerQuery()
 })
+
+
 
 async function ServerQuery() {
   username = inputLoginUsername.value
@@ -171,3 +174,4 @@ async function ServerQuery() {
   const { movements } = account
   updateUI(movements)
 }
+
